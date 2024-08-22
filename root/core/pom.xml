@@ -1,0 +1,177 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.synclite.qreader</groupId>
+	<artifactId>synclite-qreader-core</artifactId>
+	<version>${revision}</version>
+	<name>synclite-qreader-core</name>
+	<description>SyncLite Queue Reader</description>
+
+	<parent>
+		<groupId>com.synclite.qreader</groupId>
+		<artifactId>root</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<properties>
+		<synclite-logger.version>${revision}</synclite-logger.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}\target\</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}</directory>
+									<include>synclite-qreader.bat</include>
+									<include>synclite-qreader.sh</include>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<!-- <execution> -->
+					<!-- <id>copy-resources-3</id> -->
+					<!-- here the phase you need -->
+					<!-- <phase>validate</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>copy-resources</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <outputDirectory>${basedir}\target\classes</outputDirectory> -->
+					<!-- <resources> -->
+					<!-- <resource> -->
+					<!-- <directory>src\main\resources</directory> -->
+					<!-- </resource> -->
+					<!-- </resources> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!-- configure the plugin here -->
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<finalName>synclite-qreader</finalName>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib</classpathPrefix>
+							<mainClass>com.synclite.qreader.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>qreader</finalName>
+							<descriptors>
+								<descriptor>assembly/qreader.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.43.0.0</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.7.30</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.opencsv</groupId>
+		    <artifactId>opencsv</artifactId>
+		    <version>5.9</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.eclipse.paho</groupId>
+		    <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+		    <version>1.2.4</version> 
+		</dependency>
+	
+		<dependency>
+			<groupId>io.synclite</groupId>
+		    <artifactId>synclite-logger</artifactId>
+		    <version>${revision}</version>
+		</dependency>		
+	</dependencies>
+</project>
