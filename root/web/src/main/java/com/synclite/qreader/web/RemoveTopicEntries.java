@@ -234,10 +234,10 @@ public class RemoveTopicEntries extends HttpServlet {
 
 	private final void initTracer(Path workDir) {
 		this.globalTracer = Logger.getLogger(ValidateMQTTReader.class);
-		if (this.globalTracer.getAppender("QReaderTracer") == null) {
+		if (this.globalTracer.getAppender("SyncLiteQReaderTracer") == null) {
 			globalTracer.setLevel(Level.INFO);
 			RollingFileAppender fa = new RollingFileAppender();
-			fa.setName("QReaderTracer");
+			fa.setName("SyncLiteQReaderTracer");
 			fa.setFile(workDir.resolve("synclite_qreader.trace").toString());
 			fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
 			fa.setMaxBackupIndex(10);

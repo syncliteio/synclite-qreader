@@ -184,7 +184,7 @@ public class QReaderDriver implements Runnable{
 			break;
 		}
 		RollingFileAppender fa = new RollingFileAppender();
-		fa.setName("FileLogger");
+		fa.setName("SyncLiteQReaderTracer");
 		fa.setFile(Path.of(ConfLoader.getInstance().getSyncLiteDeviceDir().toString(), "synclite_qreader.trace").toString());
 		fa.setLayout(new PatternLayout("%d %-5p [%t] %m%n"));
 		fa.setMaxBackupIndex(10);

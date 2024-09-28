@@ -149,9 +149,9 @@ public class ValidateDeviceDirectory extends HttpServlet {
 	private final void initTracer(Path workDir) {
 		this.globalTracer = Logger.getLogger(ValidateDeviceDirectory.class);    	
 		globalTracer.setLevel(Level.INFO);
-		if (this.globalTracer.getAppender("QReaderTracer") == null) {
+		if (this.globalTracer.getAppender("SyncLiteQReaderTracer") == null) {
 			RollingFileAppender fa = new RollingFileAppender();
-			fa.setName("DBReaderTracer");
+			fa.setName("SyncLiteQReaderTracer");
 			fa.setFile(workDir.resolve("synclite_dbreader.trace").toString());
 			fa.setLayout(new PatternLayout("%d %-5p [%c{1}] %m%n"));
 			fa.setMaxBackupIndex(10);
