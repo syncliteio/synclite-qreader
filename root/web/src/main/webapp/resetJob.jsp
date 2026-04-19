@@ -69,6 +69,7 @@ if (request.getParameter("qreader-keep-topic-configuration") != null) {
 		%>
 
 		<form action="${pageContext.request.contextPath}/resetJob" method="post">
+			<input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 				<tbody>
 

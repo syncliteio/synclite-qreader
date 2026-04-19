@@ -25,6 +25,15 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="org.sqlite.*"%>
+<%! 
+public String escHtml(String s) {
+    return org.owasp.encoder.Encode.forHtml(s);
+}
+
+public String escAttr(Object o) {
+    return o != null ? escHtml(o.toString()) : "";
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -147,13 +156,13 @@ if (request.getParameter("qreader-trace-level") != null) {
 if (request.getParameter("qreader-synclite-device-type") != null) {
 	properties.put("qreader-synclite-device-type", request.getParameter("qreader-synclite-device-type"));
 } else {
-	properties.put("qreader-synclite-device-type", "TELEMETRY");
+	properties.put("qreader-synclite-device-type", "STREAMING");
 }
 
 if (request.getParameter("qreader-map-devices-to-single-synclite-device") != null) {
 	properties.put("qreader-map-devices-to-single-synclite-device", request.getParameter("qreader-map-devices-to-single-synclite-device"));
 } else {
-	properties.put("qreader-map-devices-to-single-synclite-device", "TELEMETRY");
+	properties.put("qreader-map-devices-to-single-synclite-device", "STREAMING");
 }
 
 if (request.getParameter("qreader-default-synclite-device-name") != null) {
@@ -381,19 +390,20 @@ properties.put("synclite-logger-configuration", conf);
 		<h2>Configure QReader Job</h2>
 		<%
 		if (errorMsg != null) {
-			out.println("<h4 style=\"color: red;\">" + errorMsg + "</h4>");
+			out.println("<h4 style=\"color: red;\">" + escHtml(errorMsg) + "</h4>");
 		}
 		%>
 
-		<form action="${pageContext.request.contextPath}/validatemqttreader" method="post">
+		   <form action="${pageContext.request.contextPath}/validatemqttreader" method="post">
+			   <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 				<tbody>
 					<tr>
 						<td>SyncLite Device Directory</td>
 						<td><input type="text" size=50 id="synclite-device-dir"
 							name="synclite-device-dir"
-							value="<%=properties.get("synclite-device-dir")%>"
-							title="Specify SyncLite device directory" readonly/>
+							value="<%=escAttr(properties.get("synclite-device-dir"))%>"
+							title="Directory where SyncLite will store device data extracted from the MQTT broker. Must be writable by the server." readonly/>
 						</td>
 					</tr>
 
@@ -401,8 +411,8 @@ properties.put("synclite-logger-configuration", conf);
 						<td>MQTT Broker URL</td>
 						<td><input type="text" size=50 id="mqtt-broker-url"
 							name="mqtt-broker-url"
-							value="<%=properties.get("mqtt-broker-url")%>"
-							title="Specify MQTT broker url"/>
+							value="<%=escAttr(properties.get("mqtt-broker-url"))%>"
+							title="MQTT broker connection URL, e.g. tcp://localhost:1883. Must be reachable from this server."/>
 						</td>
 					</tr>
 
@@ -411,7 +421,7 @@ properties.put("synclite-logger-configuration", conf);
 						<td><input type="text" id="mqtt-broker-user"
 							name="mqtt-broker-user"
 							value="<%=properties.get("mqtt-broker-user")%>"
-							title="Specify MQTT broker user name"/>
+							title="Username for authenticating with the MQTT broker (if required). Leave blank if not needed."/>
 						</td>
 					</tr>
 
@@ -420,7 +430,7 @@ properties.put("synclite-logger-configuration", conf);
 						<td><input type="password" id="mqtt-broker-password"
 							name="mqtt-broker-password"
 							value="<%=properties.get("mqtt-broker-password")%>"
-							title="Specify MQTT broker user password"/>
+							title="Password for the MQTT broker user (if required)."/>
 						</td>
 					</tr>
 
@@ -429,7 +439,7 @@ properties.put("synclite-logger-configuration", conf);
 						<td><input type="number" size=30 id="mqtt-broker-connection-timeout-s"
 							name="mqtt-broker-connection-timeout-s"
 							value="<%=properties.get("mqtt-broker-connection-timeout-s")%>"
-							title="Specify MQTT broker connection timeout in seconds"/>
+							title="Timeout (in seconds) for connecting to the MQTT broker. Typical values: 10-60."/>
 						</td>
 					</tr>
 
@@ -438,13 +448,13 @@ properties.put("synclite-logger-configuration", conf);
 						<td><input type="number" size=30 id="mqtt-broker-connection-retry-interval-s"
 							name="mqtt-broker-connection-retry-interval-s"
 							value="<%=properties.get("mqtt-broker-connection-retry-interval-s")%>"
-							title="Specify MQTT broker connection retry interval in seconds"/>
+							title="Interval (in seconds) to wait before retrying a failed MQTT broker connection. Must be positive."/>
 						</td>
 					</tr>
 
 					<tr>
 						<td>MQTT Quality of Service Level</td>
-						<td><select id="mqtt-qos-level" name="mqtt-qos-level" title="Specify MQTT quality of service level.">
+						<td><select id="mqtt-qos-level" name="mqtt-qos-level" title="MQTT Quality of Service: 0=At most once, 1=At least once, 2=Exactly once. Choose based on reliability needs.">
 								<%
 								if (properties.get("mqtt-qos-level").equals("0")) {
 									out.println("<option value=\"0\" selected>At most once(0)</option>");
@@ -469,7 +479,7 @@ properties.put("synclite-logger-configuration", conf);
 					
 					<tr>
 						<td>MQTT Clean Session</td>
-						<td><select id="mqtt-clean-session" name="mqtt-clean-session" title="Specify if a clean MQTT session should be started on connection.">
+						<td><select id="mqtt-clean-session" name="mqtt-clean-session" title="If true, the MQTT broker will not retain session state between connections. Set to false for persistent subscriptions.">
 								<%
 								if (properties.get("mqtt-clean-session").equals("true")) {
 									out.println("<option value=\"true\" selected>true</option>");
@@ -488,7 +498,7 @@ properties.put("synclite-logger-configuration", conf);
 
 					<tr>
 						<td>Message Format</td>
-						<td><select id="src-message-format" name="src-message-format" value="<%=properties.get("src-message-format")%>" title="Specify message format : CSV/JSON">
+						<td><select id="src-message-format" name="src-message-format" value="<%=properties.get("src-message-format")%>" title="Format of incoming messages. CSV is supported. JSON is not yet supported.">
 								<%
 								if (properties.get("src-message-format").equals("CSV")) {
 									out.println("<option value=\"CSV\" selected>CSV</option>");
@@ -555,10 +565,10 @@ properties.put("synclite-logger-configuration", conf);
 						<td>SyncLite Device Type</td>
 						<td><select id="qreader-synclite-device-type" name="qreader-synclite-device-type" title="Specify SyncLite device type to create. Specify *_APPENDER if you intend to query the locally created SyncLite device files (i.e. your chosen embedded database type files) with all the incoming data for in-app analytics on the SyncLite DB Reader host itself. If you only intend to stream the data to destination database then specify STREAMING">
 								<%
-								if (properties.get("qreader-synclite-device-type").equals("TELEMETRY")) {
-									out.println("<option value=\"TELEMETRY\" selected>TELEMETRY</option>");
+								if (properties.get("qreader-synclite-device-type").equals("STREAMING")) {
+									out.println("<option value=\"STREAMING\" selected>STREAMING</option>");
 								} else {
-									out.println("<option value=\"TELEMETRY\">TELEMETRY</option>");
+									out.println("<option value=\"STREAMING\">STREAMING</option>");
 								}
 
 								if (properties.get("qreader-synclite-device-type").equals("SQLITE_APPENDER")) {

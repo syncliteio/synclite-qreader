@@ -279,6 +279,10 @@ public class ValidateMQTTReader extends HttpServlet {
 			if (request.getParameter("jvm-arguments") != null) {
 				if (!request.getParameter("jvm-arguments").isBlank()) {
 					jvmArguments = request.getParameter("jvm-arguments");
+					// Validate JVM arguments to prevent command injection
+					if (!jvmArguments.matches("^(?:-X[a-zA-Z0-9]+(?:=[^\\s;`|&<>]+)?|-D[a-zA-Z0-9_.]+(?:=[^\\s;`|&<>]+)?|-ea|-da)(?:\\s+(?:-X[a-zA-Z0-9]+(?:=[^\\s;`|&<>]+)?|-D[a-zA-Z0-9_.]+(?:=[^\\s;`|&<>]+)?|-ea|-da))*$")) {
+						throw new ServletException("Invalid JVM arguments. Only safe JVM flags (-X, -D, -ea, -da) are allowed.");
+					}
 				}
 			}
 

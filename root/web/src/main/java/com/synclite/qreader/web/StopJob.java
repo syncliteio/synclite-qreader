@@ -45,8 +45,10 @@ public class StopJob extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//Get current job PID if running
+		response.sendRedirect("dashboard.jsp");
+	}
+
+	private void stopJob(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			if (request.getSession().getAttribute("synclite-device-dir") == null) {
 				response.sendRedirect("syncLiteTerms.jsp");
@@ -108,7 +110,7 @@ public class StopJob extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		stopJob(request, response);
 	}
 
 	private boolean isWindows() {

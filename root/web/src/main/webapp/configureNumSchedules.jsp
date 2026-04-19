@@ -19,6 +19,11 @@
 <%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%!
+public String escHtml(String s) {
+    return org.owasp.encoder.Encode.forHtml(s);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,7 +47,7 @@
 			String errorMsg = request.getParameter("errorMsg");
 
 			if (errorMsg != null) {
-				out.println("<h4 style=\"color: red;\">Failed to load job : " + errorMsg + "</h4>");
+				out.println("<h4 style=\"color: red;\">Failed to load job : " + escHtml(errorMsg) + "</h4>"); 
 			}
 
 			String numSchedules = "1";
@@ -90,7 +95,8 @@
 			}
 		%>
 	
-		<form action="${pageContext.request.contextPath}/validateNumSchedules" method="post">
+		   <form action="${pageContext.request.contextPath}/validateNumSchedules" method="post">
+			   <input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 				<tbody>
 					<tr>

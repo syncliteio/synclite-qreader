@@ -35,6 +35,7 @@
 			</tbody>
 		</table>
 		<form action="${pageContext.request.contextPath}/startJob"	method="post">	
+			<input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<center>
 				<button type="submit" name="next">Start</button>
 			</center>			

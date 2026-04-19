@@ -17,8 +17,8 @@
 	<properties>
 		<synclite-logger.version>${revision}</synclite-logger.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 	<build>
 		<resources>
@@ -132,6 +132,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+				<configuration>
+					<useModulePath>false</useModulePath>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -145,9 +153,9 @@
 		</dependency>
 	
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<groupId>ch.qos.reload4j</groupId>
+			<artifactId>reload4j</artifactId>
+			<version>1.2.26</version>
 		</dependency>
 
 		<dependency>
@@ -173,5 +181,12 @@
 		    <artifactId>synclite-logger</artifactId>
 		    <version>${revision}</version>
 		</dependency>		
+	    <!-- JUnit 5 Jupiter for testing -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
-</project>
+	</project>

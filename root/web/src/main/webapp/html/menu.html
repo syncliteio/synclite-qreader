@@ -12,8 +12,14 @@
 		</button>
 		<div class="expand-list">
 			<a href="syncLiteTerms.jsp">Configure and Start</a>
-			<a href="${pageContext.request.contextPath}/stopJob">Stop Job</a>
-			<a href="${pageContext.request.contextPath}/startJob">Start Job</a>
+			<form action="${pageContext.request.contextPath}/stopJob" method="post" class="menu-action-form">
+				<input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}" />
+				<button type="submit" class="menu-action-btn">Stop Job</button>
+			</form>
+			<form action="${pageContext.request.contextPath}/startJob" method="post" class="menu-action-form">
+				<input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}" />
+				<button type="submit" class="menu-action-btn">Start Job</button>
+			</form>
 			<a href="loadJob.jsp">Load Job</a>
 			<a href="resetJob.jsp">Reset Job</a>
 		</div>

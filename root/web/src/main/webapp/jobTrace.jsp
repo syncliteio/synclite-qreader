@@ -94,6 +94,7 @@
 		%>
 		
 		<form name="traceForm" method="post" action="jobTrace.jsp">
+			<input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 			<tr>
 			<td>							

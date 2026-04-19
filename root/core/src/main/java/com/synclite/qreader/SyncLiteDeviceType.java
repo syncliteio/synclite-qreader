@@ -17,7 +17,6 @@
 package com.synclite.qreader;
 
 public enum SyncLiteDeviceType {
-	TELEMETRY,
 	STREAMING,
 	SQLITE_APPENDER,
 	DUCKDB_APPENDER,

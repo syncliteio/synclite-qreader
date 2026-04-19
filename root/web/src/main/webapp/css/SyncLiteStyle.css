@@ -25,7 +25,7 @@ body {
 	flex-direction: column;
 }
 
-.sidemenu a, .expand-btn {
+.sidemenu a, .expand-btn, .menu-action-btn {
 	padding: 6px 8px 6px 16px;
 	text-decoration: none;
 	font-size: 20px;
@@ -39,7 +39,15 @@ body {
 	outline: none;
 }
 
-.sidemenu a:hover, .expand-btn:hover {
+.menu-action-form {
+	margin: 0;
+}
+
+.menu-action-btn {
+	font-family: inherit;
+}
+
+.sidemenu a:hover, .expand-btn:hover, .menu-action-btn:hover {
 	color: #f1f1f1;
 }
 
