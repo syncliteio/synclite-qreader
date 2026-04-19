@@ -17,9 +17,8 @@ This change set hardens the SyncLite QReader OSS flow end to end:
 ### Core runtime and configuration
 
 - Updated the core module to build on Java 11 and added JUnit 5/Surefire support in [root/core/pom.xml](root/core/pom.xml).
-- Changed the default SyncLite device type from `TELEMETRY` to `STREAMING` in [root/core/src/main/java/com/synclite/qreader/ConfLoader.java](root/core/src/main/java/com/synclite/qreader/ConfLoader.java).
-- Improved configuration error messages for invalid/missing paths and boolean properties in [root/core/src/main/java/com/synclite/qreader/ConfLoader.java](root/core/src/main/java/com/synclite/qreader/ConfLoader.java).
-- Updated [root/core/src/main/java/com/synclite/qreader/DeviceWriter.java](root/core/src/main/java/com/synclite/qreader/DeviceWriter.java) so `STREAMING` uses `io.synclite.logger.Streaming` instead of the telemetry driver path.
+- Updated [root/core/src/main/java/com/synclite/qreader/ConfLoader.java](root/core/src/main/java/com/synclite/qreader/ConfLoader.java) to improve configuration error messages for invalid/missing paths and boolean properties.
+- Updated [root/core/src/main/java/com/synclite/qreader/DeviceWriter.java](root/core/src/main/java/com/synclite/qreader/DeviceWriter.java) so `STREAMING` uses `io.synclite.logger.Streaming`.
 - Updated [root/core/src/main/java/com/synclite/qreader/QReaderDriver.java](root/core/src/main/java/com/synclite/qreader/QReaderDriver.java) and [root/core/src/main/java/com/synclite/qreader/SchemaChangeDriver.java](root/core/src/main/java/com/synclite/qreader/SchemaChangeDriver.java) to load only the SyncLite logger class required for the configured device type.
 - Fixed topic column list initialization in [root/core/src/main/java/com/synclite/qreader/Topic.java](root/core/src/main/java/com/synclite/qreader/Topic.java) by parsing the stored comma-separated column list instead of self-assigning a null field.
 - Added clarifying threading comments and minor collection cleanup in [root/core/src/main/java/com/synclite/qreader/QReaderDriver.java](root/core/src/main/java/com/synclite/qreader/QReaderDriver.java).
@@ -30,7 +29,6 @@ This change set hardens the SyncLite QReader OSS flow end to end:
   - QReader reads from an MQTT broker at `tcp://localhost:1883`
   - data is written into a `SQLITE_APPENDER` device database
   - generated `.sqllog` files contain both `CREATE TABLE` and `INSERT` commands
-- Added [root/core/src/test/java/io/synclite/logger/Telemetry.java](root/core/src/test/java/io/synclite/logger/Telemetry.java) as a test-scope compatibility stub for OSS logger builds.
 
 ### Web security and servlet behavior
 
@@ -70,7 +68,7 @@ This change set hardens the SyncLite QReader OSS flow end to end:
   - [root/web/src/main/webapp/configureMQTTReader.jsp](root/web/src/main/webapp/configureMQTTReader.jsp)
   - [root/web/src/main/webapp/loadJob.jsp](root/web/src/main/webapp/loadJob.jsp)
   - [root/web/src/main/webapp/selectDeviceDirectory.jsp](root/web/src/main/webapp/selectDeviceDirectory.jsp)
-- Updated [root/web/src/main/webapp/configureMQTTReader.jsp](root/web/src/main/webapp/configureMQTTReader.jsp) defaults to use `STREAMING` instead of `TELEMETRY`.
+- Updated [root/web/src/main/webapp/configureMQTTReader.jsp](root/web/src/main/webapp/configureMQTTReader.jsp) to use `STREAMING` as the default.
 - Updated [root/web/src/main/webapp/configureMQTTTables.jsp](root/web/src/main/webapp/configureMQTTTables.jsp) so the Create Table SQL field is editable and auto-generated from table name + field count using `TEXT` columns.
 - Updated [root/web/src/main/webapp/dashboard.jsp](root/web/src/main/webapp/dashboard.jsp) to:
   - include CSRF on dashboard auto-refresh POSTs

@@ -101,7 +101,6 @@ public class Topic {
 	private boolean isAppenderDevice() {
 		switch(ConfLoader.getInstance().getSyncLiteDeviceType()) {
 		case STREAMING:
-		case TELEMETRY:
 			return false;
 		default: 
 			return true;

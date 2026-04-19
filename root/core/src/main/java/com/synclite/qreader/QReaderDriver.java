@@ -242,9 +242,6 @@ public class QReaderDriver implements Runnable{
 	private final void initSyncLite() throws SyncLiteException {
 		try {
 			switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
-			case TELEMETRY:
-				Class.forName("io.synclite.logger.Telemetry");
-				break;
 			case STREAMING:
 				Class.forName("io.synclite.logger.Streaming");
 				break;

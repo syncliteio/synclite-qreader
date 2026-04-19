@@ -163,22 +163,6 @@ public class SchemaChangeDriver implements Runnable{
 							String tableName = tokens[2];
 							try {
 								stmt.execute(sql);
-								//
-								//Publish REFRESH TABLE if the device type is TELEMETRY
-								//Not needed for APPENDER device since we use explicit column list specification in INSERT
-								//for APPENDER device.
-								//								
-								if (ConfLoader.getInstance().getSyncLiteDeviceType() == SyncLiteDeviceType.TELEMETRY) {
-									//Read create table sql and construct refresh table sql from it
-									String refreshTableSql = null;
-									try (ResultSet rs = stmt.executeQuery("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = '" + tableName + "'")) {
-										String createTableSql = rs.getString("sql");
-										refreshTableSql = Topic.getRefreshTableSql(tableName, createTableSql);
-										stmt.execute(refreshTableSql);
-									} catch(Exception e) {
-										throw new SyncLiteException("Failed to execute refresh table SQL : " + refreshTableSql + " on device : " + dbFile + " : " + e.getMessage(), e);
-									}
-								}
 							} catch (Exception e) {
 								//Check for expected errors which may happen due to repeated execution of each type of Alter 
 								//statement(idempotency)
@@ -295,9 +279,8 @@ public class SchemaChangeDriver implements Runnable{
 
 	private final String getSyncLiteDeviceURL(Path dbFile) throws SyncLiteException {
 		switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
-		case TELEMETRY:
 		case STREAMING:
-			return "jdbc:synclite_telemetry:" + dbFile;
+			return "jdbc:synclite_streaming:" + dbFile;
 		case SQLITE_APPENDER:
 			return "jdbc:synclite_sqlite_appender:" + dbFile;
 		case DUCKDB_APPENDER:
@@ -314,18 +297,23 @@ public class SchemaChangeDriver implements Runnable{
 	private final void initSyncLite() throws SyncLiteException {
 		try {
 			switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
-			case TELEMETRY:
-				Class.forName("io.synclite.logger.Telemetry");
-				break;
 			case STREAMING:
 				Class.forName("io.synclite.logger.Streaming");
 				break;
 			case SQLITE_APPENDER:
+				Class.forName("io.synclite.logger.SQLiteAppender");
+				break;
 			case DUCKDB_APPENDER:
+				Class.forName("io.synclite.logger.DuckDBAppender");
+				break;
 			case DERBY_APPENDER:
+				Class.forName("io.synclite.logger.DerbyAppender");
+				break;
 			case H2_APPENDER:
+				Class.forName("io.synclite.logger.H2Appender");
+				break;
 			case HYPERSQL_APPENDER:
-				Class.forName("io.synclite.logger.Appender");
+				Class.forName("io.synclite.logger.HyperSQLAppender");
 				break;
 			default:
 				throw new SyncLiteException("Invalid SyncLite device type : " + ConfLoader.getInstance().getSyncLiteDeviceType());
