@@ -313,8 +313,23 @@ public class SchemaChangeDriver implements Runnable{
 	
 	private final void initSyncLite() throws SyncLiteException {
 		try {
-			Class.forName("io.synclite.logger.Telemetry");
-			Class.forName("io.synclite.logger.Appender");
+			switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
+			case TELEMETRY:
+				Class.forName("io.synclite.logger.Telemetry");
+				break;
+			case STREAMING:
+				Class.forName("io.synclite.logger.Streaming");
+				break;
+			case SQLITE_APPENDER:
+			case DUCKDB_APPENDER:
+			case DERBY_APPENDER:
+			case H2_APPENDER:
+			case HYPERSQL_APPENDER:
+				Class.forName("io.synclite.logger.Appender");
+				break;
+			default:
+				throw new SyncLiteException("Invalid SyncLite device type : " + ConfLoader.getInstance().getSyncLiteDeviceType());
+			}
 		} catch (ClassNotFoundException e) {
 			globalTracer.error("Failed to load SyncLite logger : ", e);
 			throw new SyncLiteException("Failed to load SyncLite logger : ", e);

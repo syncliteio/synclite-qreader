@@ -51,9 +51,9 @@ public class DeviceWriter {
 			}
 	        this.tracer = tracer;
 			this.deviceFilePath = ConfLoader.getInstance().getSyncLiteDeviceDir().resolve(this.deviceName + ".db");
-			if ((ConfLoader.getInstance().getSyncLiteDeviceType() == SyncLiteDeviceType.TELEMETRY) || (ConfLoader.getInstance().getSyncLiteDeviceType() == SyncLiteDeviceType.STREAMING)) {
-				this.deviceURL = "jdbc:synclite_telemetry:" + deviceFilePath;
-				Telemetry.initialize(this.deviceFilePath, ConfLoader.getInstance().getSyncLiteLoggerConfigurationFile(), deviceName);
+			if (ConfLoader.getInstance().getSyncLiteDeviceType() == SyncLiteDeviceType.STREAMING) {
+				this.deviceURL = "jdbc:synclite_streaming:" + deviceFilePath;
+				Streaming.initialize(this.deviceFilePath, ConfLoader.getInstance().getSyncLiteLoggerConfigurationFile(), deviceName);
 			} else if (ConfLoader.getInstance().getSyncLiteDeviceType() == SyncLiteDeviceType.SQLITE_APPENDER) {
 				this.deviceURL = "jdbc:synclite_sqlite_appender:" + deviceFilePath;
 				SQLiteAppender.initialize(this.deviceFilePath, ConfLoader.getInstance().getSyncLiteLoggerConfigurationFile(), deviceName);

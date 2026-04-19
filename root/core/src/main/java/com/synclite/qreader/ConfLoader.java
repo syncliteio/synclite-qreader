@@ -78,6 +78,7 @@ public class ConfLoader {
 		return syncLiteLoggerConfigurationFile;
 	}
 
+
 	public final Integer getMQTTQoSLevel() {
 		return mqttQOSLevel;
 	}
@@ -155,35 +156,35 @@ public class ConfLoader {
 		if (propValue != null) {
 			this.syncLiteDeviceDir = Path.of(propValue);
 			if (this.syncLiteDeviceDir == null) {
-				throw new SyncLitePropsException("Invalid value specified for synclite-device-dir in configuration file");
+				   throw new SyncLitePropsException("The 'synclite-device-dir' property is missing or invalid in the configuration file. Please specify a valid, existing directory path.");
 			}
 			if (!Files.exists(this.syncLiteDeviceDir)) {
-				throw new SyncLitePropsException("Specified synclite-device-dir path does not exist : " + this.syncLiteDeviceDir);
+				   throw new SyncLitePropsException("The specified 'synclite-device-dir' path does not exist: " + this.syncLiteDeviceDir + ". Please create the directory or specify a valid path.");
 			}
 			if (!this.syncLiteDeviceDir.toFile().canRead()) {
-				throw new SyncLitePropsException("No read permission on specified synclite-device-dir path");
+				   throw new SyncLitePropsException("No read permission for the specified 'synclite-device-dir' path: " + this.syncLiteDeviceDir);
 			}
 			if (!this.syncLiteDeviceDir.toFile().canWrite()) {
-				throw new SyncLitePropsException("No write permission on specified synclite-device-dir path");
+				   throw new SyncLitePropsException("No write permission for the specified 'synclite-device-dir' path: " + this.syncLiteDeviceDir);
 			}
-		} else {
-			throw new SyncLitePropsException("synclite-device-dir not specified in configuration file");
+		   } else {
+			   throw new SyncLitePropsException("The 'synclite-device-dir' property is not specified in the configuration file. Please add it and try again.");
 		}
 
 		propValue = properties.get("synclite-logger-configuration-file");
 		if (propValue != null) {
 			this.syncLiteLoggerConfigurationFile= Path.of(propValue);
 			if (this.syncLiteLoggerConfigurationFile == null) {
-				throw new SyncLitePropsException("Invalid value specified for synclite-logger-configuration-file in configuration file");
+				   throw new SyncLitePropsException("The 'synclite-logger-configuration-file' property is missing or invalid in the configuration file. Please specify a valid file path.");
 			}
 			if (!Files.exists(this.syncLiteLoggerConfigurationFile)) {
-				throw new SyncLitePropsException("Specified synclite-logger-configuration-file does not exist : " + syncLiteLoggerConfigurationFile);
+				   throw new SyncLitePropsException("The specified 'synclite-logger-configuration-file' does not exist: " + syncLiteLoggerConfigurationFile + ". Please create the file or specify a valid path.");
 			}
 			if (!this.syncLiteLoggerConfigurationFile.toFile().canRead()) {
-				throw new SyncLitePropsException("No read permission on specified synclite-logger-configuration-file path");
+				   throw new SyncLitePropsException("No read permission for the specified 'synclite-logger-configuration-file' path: " + syncLiteLoggerConfigurationFile);
 			}
-		} else {
-			throw new SyncLitePropsException("synclite-logger-configuration-file not specified in configuration file");
+		   } else {
+			   throw new SyncLitePropsException("The 'synclite-logger-configuration-file' property is not specified in the configuration file. Please add it and try again.");
 		}
 
 		propValue = properties.get("mqtt-qos-level");
@@ -207,11 +208,8 @@ public class ConfLoader {
 		if (propValue != null) {
 			try {
 				this.mqttCleanSession = Boolean.valueOf(propValue);
-				if (this.mqttCleanSession == null) {
-					throw new SyncLitePropsException("Invalid value specified for mqtt-clean-session in configuration file");
-				}				
-			} catch (NumberFormatException e) {
-				throw new SyncLitePropsException("Invalid value specified for mqtt-clean-session in configuration file");
+			} catch (Exception e) {
+				throw new SyncLitePropsException("Please specify a valid boolean value for mqtt-clean-session in configuration file");
 			}
 		} else {
 			this.mqttCleanSession = false;
@@ -260,18 +258,15 @@ public class ConfLoader {
 				throw new SyncLitePropsException("Invalid value specified for qreader-synclite-device-type in configuration file");
 			}
 		} else {
-			this.syncLiteDeviceType = SyncLiteDeviceType.TELEMETRY;
+			this.syncLiteDeviceType = SyncLiteDeviceType.STREAMING;
 		}
 		
 		propValue = properties.get("qreader-map-devices-to-single-synclite-device");
 		if (propValue != null) {
 			try {
 				this.mapDevicesToSingleSyncLiteDevice = Boolean.valueOf(propValue);
-				if (this.mapDevicesToSingleSyncLiteDevice == null) {
-					throw new SyncLitePropsException("Invalid value specified for qreader-synclite-device-type in configuration file");
-				}				
-			} catch (IllegalArgumentException e) {
-				throw new SyncLitePropsException("Invalid value specified for qreader-synclite-device-type in configuration file");
+			} catch (Exception e) {
+				throw new SyncLitePropsException("Please specify a valid boolean value for qreader-map-devices-to-single-synclite-device in configuration file");
 			}
 		} else {
 			this.mapDevicesToSingleSyncLiteDevice = true;
@@ -291,11 +286,8 @@ public class ConfLoader {
 		if (propValue != null) {
 			try {
 				this.ignoreMessagesForUndefinedTopics = Boolean.valueOf(propValue);
-				if (this.ignoreMessagesForUndefinedTopics == null) {
-					throw new SyncLitePropsException("Invalid value specified for qreader-ignore-messages-for-undefined-topics in configuration file");
-				}				
-			} catch (IllegalArgumentException e) {
-				throw new SyncLitePropsException("Invalid value specified for qreader-ignore-messages-for-undefined-topics in configuration file");
+			} catch (Exception e) {
+				throw new SyncLitePropsException("Please specify a valid boolean value for qreader-ignore-messages-for-undefined-topics in configuration file");
 			}
 		} else {
 			this.ignoreMessagesForUndefinedTopics = false;
@@ -316,11 +308,8 @@ public class ConfLoader {
 		if (propValue != null) {
 			try {
 				this.ignoreCorruptMessages = Boolean.valueOf(propValue);
-				if (this.ignoreCorruptMessages == null) {
-					throw new SyncLitePropsException("Invalid value specified for qreader-ignore-corrupt_messages in configuration file");
-				}				
-			} catch (IllegalArgumentException e) {
-				throw new SyncLitePropsException("Invalid value specified for qreader-ignore-corrupt_messages in configuration file");
+			} catch (Exception e) {
+				throw new SyncLitePropsException("Please specify a valid boolean value for qreader-ignore-corrupt_messages in configuration file");
 			}
 		} else {
 			this.ignoreCorruptMessages = false;
@@ -340,11 +329,8 @@ public class ConfLoader {
 		if (propValue != null) {
 			try {
 				this.messageBatchProcessing = Boolean.valueOf(propValue);
-				if (this.messageBatchProcessing == null) {
-					throw new SyncLitePropsException("Invalid value specified for qreader-message-batch-processing in configuration file");
-				}				
-			} catch (NumberFormatException e) {
-				throw new SyncLitePropsException("Invalid value specified for qreader-message-batch-processing in configuration file");
+			} catch (Exception e) {
+				throw new SyncLitePropsException("Please specify a valid boolean value for qreader-message-batch-processing in configuration file");
 			}
 		} else {
 			this.messageBatchProcessing = true;

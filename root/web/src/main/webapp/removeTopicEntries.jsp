@@ -70,6 +70,7 @@
 		%>
 
 		<form action="${pageContext.request.contextPath}/removetopicentries"	method="post">
+			<input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 				<tbody>
 				<tr></tr>

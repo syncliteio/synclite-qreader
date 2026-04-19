@@ -16,8 +16,10 @@
 
 package com.synclite.qreader;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class Topic {
 	
@@ -37,7 +39,11 @@ public class Topic {
 		this.tableName = topicTableName;
 		this.fieldCnt = topicFieldCnt;
 		this.createTableSql = createTableSql;
-		this.columnList = columnList;
+		if (coumnList != null) {
+			this.columnList = Arrays.stream(coumnList.split(","))
+					.map(String::trim)
+					.collect(Collectors.toList());
+		}
 		populateSqls();
 	}
 	

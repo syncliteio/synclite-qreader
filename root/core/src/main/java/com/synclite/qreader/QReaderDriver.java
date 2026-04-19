@@ -51,6 +51,15 @@ import org.apache.log4j.RollingFileAppender;
  */
 
 
+/**
+ * QReaderDriver threading model:
+ * - The main thread runs QReaderDriver.run(), which initializes and starts the MQTT client and message processors.
+ * - AsyncMessageProcessor uses a ScheduledExecutorService (single thread) to periodically flush messages from a BlockingQueue.
+ * - All access to dirtyDeviceWriters and msgQ in AsyncMessageProcessor is single-threaded (from the scheduled task), so no explicit synchronization is needed.
+ * - If AsyncMessageProcessor is ever accessed from multiple threads, dirtyDeviceWriters should be replaced with a thread-safe set (e.g., ConcurrentHashMap.newKeySet()).
+ * - MQTT callbacks are handled by the Paho client’s internal threads, but only interact with the message processor via thread-safe queues.
+ * - No custom thread creation or manual synchronization is present.
+ */
 public class QReaderDriver implements Runnable{
 	
 	protected abstract class DeviceWriterCreator {
@@ -110,10 +119,16 @@ public class QReaderDriver implements Runnable{
 		}
 	}
 
+	/**
+	 * AsyncMessageProcessor threading notes:
+	 * - ScheduledExecutorService (single thread) runs writeMessages().
+	 * - dirtyDeviceWriters is only accessed from the scheduled task, so HashSet is safe.
+	 * - If accessed from multiple threads, replace with ConcurrentHashMap.newKeySet().
+	 */
 	private class AsyncMessageProcessor extends MessageProcessor{
-		private HashSet<DeviceWriter> dirtyDeviceWriters = new HashSet<DeviceWriter>();
-		private BlockingQueue<RawMessage> msgQ = new LinkedBlockingQueue<RawMessage>(Integer.MAX_VALUE);
-		private ScheduledExecutorService msgProcessor;
+		private final HashSet<DeviceWriter> dirtyDeviceWriters = new HashSet<>();
+		private final BlockingQueue<RawMessage> msgQ = new LinkedBlockingQueue<>(Integer.MAX_VALUE);
+		private final ScheduledExecutorService msgProcessor;
 		private AsyncMessageProcessor() {
 			msgProcessor = Executors.newScheduledThreadPool(1);
 			msgProcessor.scheduleAtFixedRate(this::writeMessages, 0, ConfLoader.getInstance().getMessageBatchFlushIntervalMs(), TimeUnit.MILLISECONDS);
@@ -226,12 +241,31 @@ public class QReaderDriver implements Runnable{
 
 	private final void initSyncLite() throws SyncLiteException {
 		try {
-			Class.forName("io.synclite.logger.Telemetry");
-			Class.forName("io.synclite.logger.SQLiteAppender");
-			Class.forName("io.synclite.logger.DuckDBAppender");
-			Class.forName("io.synclite.logger.DerbyAppender");
-			Class.forName("io.synclite.logger.H2Appender");
-			Class.forName("io.synclite.logger.HyperSQLAppender");
+			switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
+			case TELEMETRY:
+				Class.forName("io.synclite.logger.Telemetry");
+				break;
+			case STREAMING:
+				Class.forName("io.synclite.logger.Streaming");
+				break;
+			case SQLITE_APPENDER:
+				Class.forName("io.synclite.logger.SQLiteAppender");
+				break;
+			case DUCKDB_APPENDER:
+				Class.forName("io.synclite.logger.DuckDBAppender");
+				break;
+			case DERBY_APPENDER:
+				Class.forName("io.synclite.logger.DerbyAppender");
+				break;
+			case H2_APPENDER:
+				Class.forName("io.synclite.logger.H2Appender");
+				break;
+			case HYPERSQL_APPENDER:
+				Class.forName("io.synclite.logger.HyperSQLAppender");
+				break;
+			default:
+				throw new SyncLiteException("Invalid SyncLite device type : " + ConfLoader.getInstance().getSyncLiteDeviceType());
+			}
 		} catch (ClassNotFoundException e) {
 			globalTracer.error("Failed to load SyncLite logger : ", e);
 			throw new SyncLiteException("Failed to load SyncLite logger : ", e);

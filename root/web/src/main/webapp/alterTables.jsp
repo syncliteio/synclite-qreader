@@ -25,6 +25,11 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="org.sqlite.*"%>
+<%!
+public String escHtml(String s) {
+    return org.owasp.encoder.Encode.forHtml(s);
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,13 +57,13 @@
 		
 			Path readerMetadataDBPath = Path.of(session.getAttribute("synclite-device-dir").toString(), "synclite_qreader_metadata.db");		
 			if (!Files.exists(readerMetadataDBPath)) {
-				out.println("<h4 style=\"color: red;\"> Metadata file for the Queue Reader job is missing .</h4>");
+				out.println("<h4 style=\"color: red;\">Metadata file for the Queue Reader job is missing.</h4>");
 				throw new javax.servlet.jsp.SkipPageException();				
 			}		
 
 			String errorMsg = request.getParameter("errorMsg");
 			if (errorMsg != null) {
-				out.println("<h4 style=\"color: red;\">" + errorMsg + "</h4>");
+				out.println("<h4 style=\"color: red;\">" + escHtml(errorMsg) + "</h4>");
 			}
 
 			String alterTableSQLs = "";
@@ -70,6 +75,7 @@
 		%>
 
 		<form action="${pageContext.request.contextPath}/altertables"	method="post">
+			<input type="hidden" name="csrfToken" value="<%= session.getAttribute("csrfToken") %>" />
 			<table>
 				<tbody>
 				<tr>

@@ -25,11 +25,16 @@
 	<%@include file="html/menu.html"%>
 	<div class="main">
 		<h2>Job Status</h2>
+		<%!
+		public String escHtml(String s) {
+			return org.owasp.encoder.Encode.forHtml(s);
+		}
+		%>
 		<%
 		String jobType = request.getParameter("jobType");
 		String errorMsg = request.getParameter("errorMsg");		
 		if (errorMsg != null) {
-			out.println("<h4 style=\"color: red;\">Failed to execute " + jobType + " job : " + errorMsg + "</h4>");
+			out.println("<h4 style=\"color: red;\">" + escHtml(errorMsg) + "</h4>");
 		}
 		%>
 	</div>
