@@ -180,11 +180,20 @@ public class RemoveTopicEntries extends HttpServlet {
 
 				response.sendRedirect("removeTopicEntries.jsp");
 			}
-		} catch (Exception e) {
+		} catch (ServletException e) {
+			response.setStatus(400);
 			//System.out.println("exception : " + e);
 			this.globalTracer.error("Exception while processing request:", e);
 			String errorMsg = e.getMessage();
 			request.getRequestDispatcher("removeTopicEntries.jsp?errorMsg=" + errorMsg).forward(request, response);
+		
+		} catch (Exception e) {
+			response.setStatus(500);
+			//System.out.println("exception : " + e);
+			this.globalTracer.error("Exception while processing request:", e);
+			String errorMsg = e.getMessage();
+			request.getRequestDispatcher("removeTopicEntries.jsp?errorMsg=" + errorMsg).forward(request, response);
+		
 		}
 	}
 

@@ -405,12 +405,22 @@ public class ValidateMQTTReader extends HttpServlet {
 			//request.getRequestDispatcher("configureMQTTTables.jsp").forward(request, response);
 			response.sendRedirect("configureMQTTTables.jsp");
 
-		} catch (Exception e) {
+		} catch (ServletException e) {
+			response.setStatus(400);
 			//System.out.println("exception : " + e);
 			this.globalTracer.error("Exception while processing request:", e);
 			String errorMsg = e.getMessage();
 			request.getRequestDispatcher("configureMQTTReader.jsp?errorMsg=" + errorMsg).forward(request, response);
 			throw new ServletException(e);
+		
+		} catch (Exception e) {
+			response.setStatus(500);
+			//System.out.println("exception : " + e);
+			this.globalTracer.error("Exception while processing request:", e);
+			String errorMsg = e.getMessage();
+			request.getRequestDispatcher("configureMQTTReader.jsp?errorMsg=" + errorMsg).forward(request, response);
+			throw new ServletException(e);
+		
 		}
 	}
 	private final void testBrokerConnection(String mqttBrokerURL, String user, String password, String timeout) throws ServletException {
