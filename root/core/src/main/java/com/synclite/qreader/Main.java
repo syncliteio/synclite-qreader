@@ -67,6 +67,7 @@ public class Main {
 				}				
 
 				tryLockDBDir();
+				Runtime.getRuntime().addShutdownHook(new Thread(() -> appLock.release()));
 				ConfLoader.getInstance().loadQReaderConfigProperties(qReaderConfigFilePath);
 				
 				if (CMD == CMDType.READ) {
