@@ -1,6 +1,6 @@
-# SyncLite QReader — Rapid IoT Data Connector
+﻿# SyncLite QReader – Rapid IoT Data Connector
 
-> Part of the [SyncLite Platform](https://github.com/syncliteio/SyncLite) — Build Anything, Sync Anywhere.
+> Part of the [SyncLite Platform](https://github.com/syncliteio/SyncLite) – Build Anything, Sync Anywhere.
 
 ## What is SyncLite QReader?
 
@@ -10,26 +10,26 @@ With QReader you can connect thousands of IoT gateways and sensor feeds to a cen
 
 ```
 IoT Devices / Sensors
-       │  MQTT publish
+       |  MQTT publish
        ▼
-  MQTT Broker(s)  ──subscribe──▶  SyncLite QReader  ──▶  Staging Storage  ──▶  SyncLite Consolidator  ──▶  Destination DB / DW
+  MQTT Broker(s)  --subscribe-->  SyncLite QReader  -->  Staging Storage  -->  SyncLite Consolidator  -->  Destination DB / DW
 ```
 
 ## Key Features
 
-- **Standard MQTT over Eclipse Paho** — one implementation, one protocol (MQTT v3.1 via Eclipse Paho MQTT client); works with any MQTT-compliant broker out of the box
-- **One broker per job, unlimited topics** — each QReader job connects to a single broker URL and subscribes to all topics on it via a wildcard (`#`); run parallel jobs for multiple brokers
-- **CSV payload parsing** — parses comma-separated (or custom-delimited) message payloads; JSON and Protobuf formats are defined in the codebase but not yet implemented
-- **Schema mapping** — maps MQTT topic paths and CSV payload fields to destination table columns
-- **QoS levels** — supports QoS 0, 1, and 2
-- **TLS/SSL** — secure connections to brokers
-- **Auto-reconnect** — survives transient broker outages with configurable retry interval
-- **Web UI** — browser-based job configuration, live message rate gauges, and error logs
-- **Edge, fog, and cloud analytics** — enables real-time analytics at all three tiers
+- **Standard MQTT over Eclipse Paho** – one implementation, one protocol (MQTT v3.1 via Eclipse Paho MQTT client); works with any MQTT-compliant broker out of the box
+- **One broker per job, unlimited topics** – each QReader job connects to a single broker URL and subscribes to all topics on it via a wildcard (`#`); run parallel jobs for multiple brokers
+- **CSV payload parsing** – parses comma-separated (or custom-delimited) message payloads; JSON and Protobuf formats are defined in the codebase but not yet implemented
+- **Schema mapping** – maps MQTT topic paths and CSV payload fields to destination table columns
+- **QoS levels** – supports QoS 0, 1, and 2
+- **TLS/SSL** – secure connections to brokers
+- **Auto-reconnect** – survives transient broker outages with configurable retry interval
+- **Web UI** – browser-based job configuration, live message rate gauges, and error logs
+- **Edge, fog, and cloud analytics** – enables real-time analytics at all three tiers
 
 ## Supported Brokers
 
-QReader uses the **Eclipse Paho MQTT v3 client** — there is no per-broker adapter code. Any broker that speaks standard MQTT v3.1 works automatically. The table below lists commonly tested examples:
+QReader uses the **Eclipse Paho MQTT v3 client** – there is no per-broker adapter code. Any broker that speaks standard MQTT v3.1 works automatically. The table below lists commonly tested examples:
 
 | Broker | Notes |
 |---|---|
@@ -38,7 +38,7 @@ QReader uses the **Eclipse Paho MQTT v3 client** — there is no per-broker adap
 | HiveMQ | Enterprise MQTT broker |
 | AWS IoT Core | Managed IoT broker (MQTT over TLS, port 8883) |
 | Azure IoT Hub | Microsoft managed IoT broker (MQTT over TLS, port 8883) |
-| Any MQTT v3.1-compliant broker | Same code path — no broker-specific integration |
+| Any MQTT v3.1-compliant broker | Same code path – no broker-specific integration |
 
 ## Quick Start
 
@@ -50,10 +50,10 @@ QReader uses the **Eclipse Paho MQTT v3 client** — there is no per-broker adap
 
 ## Use Cases
 
-- Industrial IoT: machine sensor data → PostgreSQL / ClickHouse analytics
-- Smart building: environmental sensors → time-series database
-- Fleet tracking: GPS/telemetry → data warehouse
-- Energy monitoring: smart meter readings → data lake
+- Industrial IoT: machine sensor data â†’ PostgreSQL / ClickHouse analytics
+- Smart building: environmental sensors â†’ time-series database
+- Fleet tracking: GPS/telemetry â†’ data warehouse
+- Energy monitoring: smart meter readings â†’ data lake
 
 ## Build
 
@@ -80,4 +80,5 @@ Built WAR: `root/web/target/synclite-qreader-oss.war`
 
 ---
 
-← Back to the [SyncLite Platform README](https://github.com/syncliteio/SyncLite/blob/main/README.md)
+â† Back to the [SyncLite Platform README](https://github.com/syncliteio/SyncLite/blob/main/README.md)
+
