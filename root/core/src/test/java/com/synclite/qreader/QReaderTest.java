@@ -38,8 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class QReaderTest {
 
     private static final String MQTT_BROKER_URL = System.getProperty("mqtt.broker.url", "tcp://localhost:1883");
-    private static final Path TEST_HOME = Path.of(System.getProperty("user.home"), "synclite", "test");
-    private static final Path DB_DIR = TEST_HOME.resolve("db").resolve("testqreader");
+    private static final Path TEST_HOME = Path.of(System.getProperty("user.home"), "synclite", "tests");
+    private static final Path DB_DIR = TEST_HOME.resolve("db").resolve("qreader").resolve("testqreader");
     private static final Path STAGE_DIR = TEST_HOME.resolve("stageDir");
     private static final String DEVICE_NAME = "testdevice";
 
@@ -64,11 +64,11 @@ public class QReaderTest {
             }
         }
 
-        // Write synclite_logger.conf (used by SQLiteAppender.initialize)
-        loggerConfigFile = DB_DIR.resolve("synclite_logger.conf");
+        // Write synclite.conf (used by SQLiteAppender.initialize)
+        loggerConfigFile = DB_DIR.resolve("synclite.conf");
         Files.writeString(loggerConfigFile,
                 "local-data-stage-directory = " + STAGE_DIR + "\n" +
-                "destination-type = FS\n");
+                "device-stage-type = FS\n");
 
         // Write synclite-qreader.conf
         qreaderConfigFile = DB_DIR.resolve("synclite-qreader.conf");
