@@ -298,22 +298,22 @@ public class SchemaChangeDriver implements Runnable{
 		try {
 			switch (ConfLoader.getInstance().getSyncLiteDeviceType()) {
 			case STREAMING:
-				Class.forName("io.synclite.logger.Streaming");
+				Class.forName("io.synclite.Streaming");
 				break;
 			case SQLITE_APPENDER:
-				Class.forName("io.synclite.logger.SQLiteAppender");
+				Class.forName("io.synclite.SQLiteAppender");
 				break;
 			case DUCKDB_APPENDER:
-				Class.forName("io.synclite.logger.DuckDBAppender");
+				Class.forName("io.synclite.DuckDBAppender");
 				break;
 			case DERBY_APPENDER:
-				Class.forName("io.synclite.logger.DerbyAppender");
+				Class.forName("io.synclite.DerbyAppender");
 				break;
 			case H2_APPENDER:
-				Class.forName("io.synclite.logger.H2Appender");
+				Class.forName("io.synclite.H2Appender");
 				break;
 			case HYPERSQL_APPENDER:
-				Class.forName("io.synclite.logger.HyperSQLAppender");
+				Class.forName("io.synclite.HyperSQLAppender");
 				break;
 			default:
 				throw new SyncLiteException("Invalid SyncLite device type : " + ConfLoader.getInstance().getSyncLiteDeviceType());

@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
-import io.synclite.logger.*;
+import io.synclite.*;
 
 public class DeviceWriter {
 

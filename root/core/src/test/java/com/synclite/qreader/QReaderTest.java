@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class QReaderTest {
 
     private static final String MQTT_BROKER_URL = System.getProperty("mqtt.broker.url", "tcp://localhost:1883");
-    private static final Path TEST_HOME = Path.of(System.getProperty("user.home"), "synclite", "tests");
+    private static final Path TEST_HOME = Path.of(System.getProperty("user.home"), "synclite", "test", "qreader");
     private static final Path DB_DIR = TEST_HOME.resolve("db").resolve("qreader").resolve("testqreader");
     private static final Path STAGE_DIR = TEST_HOME.resolve("stageDir");
     private static final String DEVICE_NAME = "testdevice";
