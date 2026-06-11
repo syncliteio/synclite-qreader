@@ -78,6 +78,15 @@ import java.sql.Types;
 @WebServlet("/validatemqttreader")
 public class ValidateMQTTReader extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	/** Bump when on-disk layout/semantics of {@code synclite_qreader_metadata.db} change
+	 *  in a non-back-compatible way. Stored in the {@code metadata} table under
+	 *  {@link #SYNCLITE_METADATA_VERSION_KEY} so a future qreader version can detect an
+	 *  older store and run a migration routine. Kept in sync with
+	 *  {@code com.synclite.qreader.MetadataManager}. */
+	private static final long SYNCLITE_METADATA_VERSION = 1L;
+	private static final String SYNCLITE_METADATA_VERSION_KEY = "synclite_metadata_version";
+
 	private Logger globalTracer;
 
 	/**
@@ -447,6 +456,24 @@ public class ValidateMQTTReader extends HttpServlet {
 		try (Connection conn = DriverManager.getConnection(url)){
 			try (Statement stmt = conn.createStatement()) {
 				stmt.execute(createMetadataTableSql);
+			}
+
+			// Key/value `metadata` table seeded with the on-disk version so a future
+			// qreader release can detect an older store and run a migration.
+			try (Statement stmt = conn.createStatement()) {
+				stmt.execute("CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT)");
+			}
+			try (PreparedStatement sel = conn.prepareStatement("SELECT 1 FROM metadata WHERE key = ?")) {
+				sel.setString(1, SYNCLITE_METADATA_VERSION_KEY);
+				try (ResultSet rs = sel.executeQuery()) {
+					if (!rs.next()) {
+						try (PreparedStatement ins = conn.prepareStatement("INSERT INTO metadata(key, value) VALUES(?, ?)")) {
+							ins.setString(1, SYNCLITE_METADATA_VERSION_KEY);
+							ins.setString(2, Long.toString(SYNCLITE_METADATA_VERSION));
+							ins.executeUpdate();
+						}
+					}
+				}
 			}
 		} catch(SQLException e) {
 			this.globalTracer.error("Failed to create qreader metadata table : ", e);

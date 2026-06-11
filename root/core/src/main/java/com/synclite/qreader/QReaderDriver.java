@@ -357,6 +357,7 @@ public class QReaderDriver implements Runnable{
 		//Load devices from metadata file
 		try {
 			this.qReaderMetadataFile = ConfLoader.getInstance().getSyncLiteDeviceDir().resolve("synclite_qreader_metadata.db");
+			MetadataManager.ensureMetadataTable(this.qReaderMetadataFile);
 			String url = "jdbc:sqlite:" + qReaderMetadataFile;
 			Class.forName("org.sqlite.JDBC");
 			try (Connection conn = DriverManager.getConnection(url)) {
