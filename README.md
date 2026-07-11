@@ -1,6 +1,6 @@
-# SyncLite QReader – Rapid IoT Data Connector
+# SyncLite QReader ï¿½ Rapid IoT Data Connector
 
-> Part of the [SyncLite Platform](https://github.com/syncliteio/SyncLite) – Build Anything, Sync Anywhere.
+> Part of the [SyncLite Platform](https://github.com/syncliteio/SyncLite) ï¿½ Build Anything, Sync Anywhere.
 
 ## What is SyncLite QReader?
 
@@ -17,19 +17,19 @@ IoT Devices / Sensors
 
 ## Key Features
 
-- **Standard MQTT over Eclipse Paho** – one implementation, one protocol (MQTT v3.1 via Eclipse Paho MQTT client); works with any MQTT-compliant broker out of the box
-- **One broker per job, unlimited topics** – each QReader job connects to a single broker URL and subscribes to all topics on it via a wildcard (`#`); run parallel jobs for multiple brokers
-- **CSV payload parsing** – parses comma-separated (or custom-delimited) message payloads; JSON and Protobuf formats are defined in the codebase but not yet implemented
-- **Schema mapping** – maps MQTT topic paths and CSV payload fields to destination table columns
-- **QoS levels** – supports QoS 0, 1, and 2
-- **TLS/SSL** – secure connections to brokers
-- **Auto-reconnect** – survives transient broker outages with configurable retry interval
-- **Web UI** – browser-based job configuration, live message rate gauges, and error logs
-- **Edge, fog, and cloud analytics** – enables real-time analytics at all three tiers
+- **Standard MQTT over Eclipse Paho** ï¿½ one implementation, one protocol (MQTT v3.1 via Eclipse Paho MQTT client); works with any MQTT-compliant broker out of the box
+- **One broker per job, unlimited topics** ï¿½ each QReader job connects to a single broker URL and subscribes to all topics on it via a wildcard (`#`); run parallel jobs for multiple brokers
+- **CSV payload parsing** ï¿½ parses comma-separated (or custom-delimited) message payloads; JSON and Protobuf formats are defined in the codebase but not yet implemented
+- **Schema mapping** ï¿½ maps MQTT topic paths and CSV payload fields to destination table columns
+- **QoS levels** ï¿½ supports QoS 0, 1, and 2
+- **TLS/SSL** ï¿½ secure connections to brokers
+- **Auto-reconnect** ï¿½ survives transient broker outages with configurable retry interval
+- **Web UI** ï¿½ browser-based job configuration, live message rate gauges, and error logs
+- **Edge, fog, and cloud analytics** ï¿½ enables real-time analytics at all three tiers
 
 ## Supported Brokers
 
-QReader uses the **Eclipse Paho MQTT v3 client** – there is no per-broker adapter code. Any broker that speaks standard MQTT v3.1 works automatically. The table below lists commonly tested examples:
+QReader uses the **Eclipse Paho MQTT v3 client** ï¿½ there is no per-broker adapter code. Any broker that speaks standard MQTT v3.1 works automatically. The table below lists commonly tested examples:
 
 | Broker | Notes |
 |---|---|
@@ -38,7 +38,7 @@ QReader uses the **Eclipse Paho MQTT v3 client** – there is no per-broker adapte
 | HiveMQ | Enterprise MQTT broker |
 | AWS IoT Core | Managed IoT broker (MQTT over TLS, port 8883) |
 | Azure IoT Hub | Microsoft managed IoT broker (MQTT over TLS, port 8883) |
-| Any MQTT v3.1-compliant broker | Same code path – no broker-specific integration |
+| Any MQTT v3.1-compliant broker | Same code path ï¿½ no broker-specific integration |
 
 ## Quick Start
 
@@ -62,7 +62,7 @@ cd synclite-qreader/root
 mvn -Drevision=1.0.0 clean install
 ```
 
-Built WAR: `root/web/target/synclite-qreader-oss.war`
+Built WAR: `root/web/target/synclite-qreader-1.0.0.war`
 
 ## Related Components
 
