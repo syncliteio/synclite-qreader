@@ -59,10 +59,10 @@ QReader uses the **Eclipse Paho MQTT v3 client** � there is no per-broker adap
 
 ```bash
 cd synclite-qreader/root
-mvn -Drevision=1.0.0 clean install
+mvn -Drevision=1.1.0 clean install
 ```
 
-Built WAR: `root/web/target/synclite-qreader-1.0.0.war`
+Built WAR: `root/web/target/synclite-qreader-1.1.0.war`
 
 ## Related Components
 
