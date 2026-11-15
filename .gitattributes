@@ -1,3 +1,4 @@
+
 # Keep shell scripts LF on Linux/Windows
 *.sh text eol=lf
 *.bash text eol=lf
